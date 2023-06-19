@@ -18,3 +18,5 @@ from .image_classification import *
 
 from . import object_detection
 from .object_detection import *
+
+from . import tasks
