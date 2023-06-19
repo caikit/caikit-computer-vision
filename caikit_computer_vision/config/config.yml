@@ -1,3 +1,4 @@
+
 # Copyright The Caikit Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-block_id: 00110203-0405-0607-0809-0a0b02dd0e0f
-name: HelloWorldModule
-version: 0.0.1
+# Caikit model configuration
+runtime:
+    # Package name containing the model wrapping
+  library: caikit_computer_vision

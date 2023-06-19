@@ -1,4 +1,3 @@
-
 # Copyright The Caikit Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# Caikit model configuration
-# Relative paths are relative to where the config is loaded
-runtime:
-    # All models in this directory are loaded at boot time
-    local_models_dir: "../models"
-
-    # Training configuration
-    training:
-        # The directory to save trained models in
-        output_dir: "../train_output"
