@@ -16,9 +16,4 @@
 # Caikit model configuration
 runtime:
     # Package name containing the model wrapping
-    library: caikit_template
-
-    # Model wrapping configuration
-    service_generation:
-        primitive_data_model_types:
-            - "caikit_template.data_model.hello_world.HelloWorldInput"
+  library: caikit_computer_vision
