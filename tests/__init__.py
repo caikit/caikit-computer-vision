@@ -11,15 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
 
-# Local
-from . import image
-from .image import *
-
-from . import image_classification
-from .image_classification import *
-
-from . import object_detection
-from .object_detection import *
-
-from . import tasks
+FIXTURES_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "fixtures")
