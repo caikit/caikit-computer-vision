@@ -1,24 +1,24 @@
 ---
- name: User story
- about: A user-oriented story describing a piece of work to do
- title: ""
- labels: ""
- assignees: ""
- ---
+name: User story
+about: A user-oriented story describing a piece of work to do
+title: ""
+labels: ""
+assignees: ""
+---
 
- ## Description
+## Description
 
- As a <user type>, I want to <do something>, so that I can <accomplish something>
+As a <user type>, I want to <do something>, so that I can <accomplish something>
 
- ## Discussion
+## Discussion
 
- Provide detailed discussion here
+Provide detailed discussion here
 
- ## Acceptance Criteria
+## Acceptance Criteria
 
  <!-- Remove any that don't apply -->
 
- - [ ] Unit tests cover new/changed code
- - [ ] Examples build against new/changed code
- - [ ] READMEs are updated
- - [ ] Type of [semantic version](https://semver.org/) change is identified
+- [ ] Unit tests cover new/changed code
+- [ ] Examples build against new/changed code
+- [ ] READMEs are updated
+- [ ] Type of [semantic version](https://semver.org/) change is identified

@@ -13,10 +13,6 @@
 # limitations under the License.
 
 # Local
-from . import image_classification
+from . import image_classification, object_detection, tasks
 from .image_classification import *
-
-from . import object_detection
 from .object_detection import *
-
-from . import tasks
