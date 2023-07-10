@@ -1,4 +1,3 @@
-
 # Copyright The Caikit Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,5 +14,5 @@
 
 # Caikit model configuration
 runtime:
-    # Package name containing the model wrapping
+  # Package name containing the model wrapping
   library: caikit_computer_vision

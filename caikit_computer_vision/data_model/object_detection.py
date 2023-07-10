@@ -13,15 +13,16 @@
 # limitations under the License.
 """Data structures for text object detection in images."""
 
-# First Party
+# Third Party
 from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
-import alog
 
-# Local
+# First Party
 from caikit.core import DataObjectBase, dataobject
 from caikit.interfaces.common.data_model import ProducerId
+import alog
 
 log = alog.use_channel("DATAM")
+
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class BoundingBox(DataObjectBase):
@@ -30,11 +31,13 @@ class BoundingBox(DataObjectBase):
     ymin: Annotated[int, FieldNumber(3)]
     ymax: Annotated[int, FieldNumber(4)]
 
+
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class DetectedObject(DataObjectBase):
     score: Annotated[float, FieldNumber(1)]
     label: Annotated[str, FieldNumber(2)]
     box: Annotated[BoundingBox, FieldNumber(3)]
+
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class ObjectDetectionResult(DataObjectBase):

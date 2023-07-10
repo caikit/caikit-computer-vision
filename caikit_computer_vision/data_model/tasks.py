@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-This module holds the Task definitions for all common NLP tasks
+This module holds the Task definitions for all common vision tasks
 """
 
 # Standard
 from typing import Iterable
 
-# Local
+# First Party
 from caikit.core import TaskBase, task
-from .object_detection import ObjectDetectionResult
+
+# Local
 from .image_classification import ImageClassificationResult
+from .object_detection import ObjectDetectionResult
+
 
 # TODO - add support for image DM primitives
 @task(
@@ -33,6 +36,7 @@ class ObjectDetectionTask(TaskBase):
     and producing 0 or more detected objects, which typically include labels
     and confidence scores.
     """
+
 
 @task(
     required_parameters={"inputs": bytes},
