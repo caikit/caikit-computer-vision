@@ -14,7 +14,7 @@ classifiers=[
     "License :: OSI Approved :: Apache Software License"
 ]
 dependencies = [
-    "caikit==0.8.0"
+    "caikit==0.16.0"
 ]
 
 [project.urls]
