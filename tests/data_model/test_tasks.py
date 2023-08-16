@@ -70,10 +70,12 @@ def test_tasks(
     reset_module_registry, reset_module_backend_registry, task: Type[TaskBase]
 ):
     """Common tests for all tasks"""
-    # Only support single required param named "inputs"
-    assert set(task.get_required_parameters().keys()) == {"inputs"}
-    input_type = task.get_required_parameters()["inputs"]
-    output_type = task.get_output_type()
+    # Only support single required param named "inputs", current flavor is
+    # no streaming for any vision task types (at least not yet!)
+    assert set(task.get_required_parameters(input_streaming=False).keys()) == {"inputs"}
+
+    input_type = task.get_required_parameters(input_streaming=False)["inputs"]
+    output_type = task.get_output_type(output_streaming=False)
 
     # Version with the right signature and nothing else
     @module(id="foo1", name="Foo", version="0.0.0", task=task)

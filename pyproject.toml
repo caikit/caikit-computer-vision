@@ -9,12 +9,12 @@ version = "0.0.1"
 description = "Caikit Computer Vision"
 license = {text = "Apache-2.0"}
 readme = "README.md"
-requires-python = "~=3.9"
+requires-python = "~=3.8"
 classifiers=[
     "License :: OSI Approved :: Apache Software License"
 ]
 dependencies = [
-    "caikit==0.8.0"
+    "caikit[runtime-grpc,runtime-http]>=0.16.0,<0.17.0",
 ]
 
 [project.urls]
