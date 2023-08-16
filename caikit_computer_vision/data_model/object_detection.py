@@ -13,6 +13,7 @@
 # limitations under the License.
 """Data structures for text object detection in images."""
 
+# Standard
 from typing import List
 
 # Third Party
