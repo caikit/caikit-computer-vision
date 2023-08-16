@@ -13,6 +13,9 @@
 # limitations under the License.
 """Data structures for classification in images."""
 
+# Standard
+from typing import List
+
 # Third Party
 from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
 
@@ -32,5 +35,5 @@ class ImageClassification(DataObjectBase):
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class ImageClassificationResult(DataObjectBase):
-    classifications: Annotated[list[ImageClassification], FieldNumber(1)]
+    classifications: Annotated[List[ImageClassification], FieldNumber(1)]
     producer_id: Annotated[ProducerId, FieldNumber(2)]

@@ -13,6 +13,9 @@
 # limitations under the License.
 """Data structures for text object detection in images."""
 
+# Standard
+from typing import List
+
 # Third Party
 from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
 
@@ -41,5 +44,5 @@ class DetectedObject(DataObjectBase):
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class ObjectDetectionResult(DataObjectBase):
-    detected_objects: Annotated[list[BoundingBox], FieldNumber(1)]
+    detected_objects: Annotated[List[BoundingBox], FieldNumber(1)]
     producer_id: Annotated[ProducerId, FieldNumber(2)]
