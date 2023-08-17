@@ -15,6 +15,9 @@ classifiers=[
 ]
 dependencies = [
     "caikit[runtime-grpc,runtime-http]>=0.16.0,<0.18.0",
+    "transformers>=4.27.1,<5",
+    "torch>2.0,<3",
+    "pillow>=6.2.1,<11",
 ]
 
 [project.urls]
