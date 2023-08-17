@@ -1,7 +1,5 @@
 {
-  "architectures": [
-    "YolosForObjectDetection"
-  ],
+  "architectures": ["YolosForObjectDetection"],
   "attention_probs_dropout_prob": 0.1,
   "auxiliary_loss": false,
   "bbox_cost": 5,
@@ -18,10 +16,7 @@
     "1": "LABEL_1",
     "2": "LABEL_2"
   },
-  "image_size": [
-    30,
-    30
-  ],
+  "image_size": [30, 30],
   "initializer_range": 0.02,
   "intermediate_size": 37,
   "label2id": {
