@@ -20,9 +20,9 @@ from typing import List
 from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
 
 # First Party
-import alog
 from caikit.core import DataObjectBase, dataobject
 from caikit.interfaces.common.data_model import ProducerId
+import alog
 
 log = alog.use_channel("DATAM")
 
