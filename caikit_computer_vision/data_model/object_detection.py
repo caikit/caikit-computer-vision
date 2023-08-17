@@ -20,9 +20,9 @@ from typing import List
 from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
 
 # First Party
+import alog
 from caikit.core import DataObjectBase, dataobject
 from caikit.interfaces.common.data_model import ProducerId
-import alog
 
 log = alog.use_channel("DATAM")
 
@@ -44,5 +44,5 @@ class DetectedObject(DataObjectBase):
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class ObjectDetectionResult(DataObjectBase):
-    detected_objects: Annotated[List[BoundingBox], FieldNumber(1)]
+    detected_objects: Annotated[List[DetectedObject], FieldNumber(1)]
     producer_id: Annotated[ProducerId, FieldNumber(2)]
