@@ -64,20 +64,32 @@ class TransformersObjectDetector(ModuleBase):
         self.detector_model = detector_model
 
     @classmethod
-    def load(cls, model_path):
-        model_path = os.path.abspath(model_path)
+    def load(
+        cls, model_path: Union[str, "ModuleConfig"]
+    ) -> "TransformersObjectDetector":
+        """Load an instance of this class.
+
+        Args
+            model_path: Union[str, "ModuleConfig"]
+                Path to model to be loaded from disk or raw ModuleConfig to be
+                leveraged.
+
+        Returns:
+            TransformersObjectDetector
+                Instance of this class.
+        """
         config = ModuleConfig.load(model_path)
-        improc_abs_path = os.path.join(
-            model_path, config[cls._IMPROC_ARTIFACTS_CONFIG_KEY]
+        improc_path = os.path.join(
+            config.model_path, config[cls._IMPROC_ARTIFACTS_CONFIG_KEY]
         )
-        detector_abs_path = os.path.join(
-            model_path, config[cls._DETECTOR_ARTIFACTS_CONFIG_KEY]
+        detector_path = os.path.join(
+            config.model_path, config[cls._DETECTOR_ARTIFACTS_CONFIG_KEY]
         )
-        error.dir_check("<CCV18883415E>", improc_abs_path)
-        error.dir_check("<CCV19293413E>", detector_abs_path)
+        error.dir_check("<CCV18883415E>", improc_path)
+        error.dir_check("<CCV19293413E>", detector_path)
         return cls.bootstrap(
-            model_name=detector_abs_path,
-            improc_name=improc_abs_path,
+            model_name=detector_path,
+            improc_name=improc_path,
         )
 
     def save(
