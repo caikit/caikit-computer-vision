@@ -44,5 +44,5 @@ class DetectedObject(DataObjectBase):
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class ObjectDetectionResult(DataObjectBase):
-    detected_objects: Annotated[List[BoundingBox], FieldNumber(1)]
+    detected_objects: Annotated[List[DetectedObject], FieldNumber(1)]
     producer_id: Annotated[ProducerId, FieldNumber(2)]
