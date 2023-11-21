@@ -24,7 +24,16 @@ from caikit.core import DataObjectBase, dataobject
 from caikit.interfaces.common.data_model import ProducerId
 import alog
 
+# Local
+from .image_segmentation import ObjectSegment
+
 log = alog.use_channel("DATAM")
+
+
+@dataobject(package="caikit_data_model.caikit_computer_vision")
+class Point2f(DataObjectBase):
+    x: Annotated[float, FieldNumber(1)]
+    y: Annotated[float, FieldNumber(2)]
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
@@ -40,6 +49,11 @@ class DetectedObject(DataObjectBase):
     score: Annotated[float, FieldNumber(1)]
     label: Annotated[str, FieldNumber(2)]
     box: Annotated[BoundingBox, FieldNumber(3)]
+    # Optional segmentation information, containing a list of pixel
+    # coordinates representing the segmentation mask of the object.
+    object_segments: Annotated[List[Point2f], FieldNumber(4)]
+    # Optional run-length encoding of the object being described.
+    rle: Annotated[str, FieldNumber(5)]
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
