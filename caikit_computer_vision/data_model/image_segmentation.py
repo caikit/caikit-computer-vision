@@ -11,7 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Data structures for text object detection in images."""
+"""Data structures for segmentation in images."""
+
 
 # Standard
 from typing import List
@@ -22,41 +23,24 @@ from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
 # First Party
 from caikit.core import DataObjectBase, dataobject
 from caikit.interfaces.common.data_model import ProducerId
+from caikit.interfaces.vision import data_model as caikit_dm
 import alog
-
-# Local
-from .image_segmentation import ObjectSegment
 
 log = alog.use_channel("DATAM")
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
-class Point2f(DataObjectBase):
-    x: Annotated[float, FieldNumber(1)]
-    y: Annotated[float, FieldNumber(2)]
-
-
-@dataobject(package="caikit_data_model.caikit_computer_vision")
-class BoundingBox(DataObjectBase):
-    xmin: Annotated[int, FieldNumber(1)]
-    xmax: Annotated[int, FieldNumber(2)]
-    ymin: Annotated[int, FieldNumber(3)]
-    ymax: Annotated[int, FieldNumber(4)]
-
-
-@dataobject(package="caikit_data_model.caikit_computer_vision")
-class DetectedObject(DataObjectBase):
+class ObjectSegment(DataObjectBase):
     score: Annotated[float, FieldNumber(1)]
     label: Annotated[str, FieldNumber(2)]
-    box: Annotated[BoundingBox, FieldNumber(3)]
-    # Optional segmentation information, containing a list of pixel
-    # coordinates representing the segmentation mask of the object.
-    object_segments: Annotated[List[Point2f], FieldNumber(4)]
-    # Optional run-length encoding of the object being described.
-    rle: Annotated[str, FieldNumber(5)]
+    # TODO: We should be able to specify subtype, i.e., PIL image mode.
+    # This mask should be image mode (L), 8 bit grayscale image treated
+    # as a binary image, where 0 is background, and 255 is part of the
+    # object to align with HF task definitions.
+    mask: Annotated[caikit_dm.Image, FieldNumber(3)]
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
-class ObjectDetectionResult(DataObjectBase):
-    detected_objects: Annotated[List[DetectedObject], FieldNumber(1)]
+class ImageSegmentationResult(DataObjectBase):
+    object_segments: Annotated[List[ObjectSegment], FieldNumber(1)]
     producer_id: Annotated[ProducerId, FieldNumber(2)]

@@ -64,6 +64,7 @@ class InvalidType:
     (
         tasks.ObjectDetectionTask,
         tasks.ImageClassificationTask,
+        tasks.ImageSegmentationTask,
     ),
 )
 def test_tasks(
