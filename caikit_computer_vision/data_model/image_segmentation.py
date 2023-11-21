@@ -22,11 +22,12 @@ from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
 
 # First Party
 from caikit.core import DataObjectBase, dataobject
-from caikit.interfaces.vision import data_model as caikit_dm
 from caikit.interfaces.common.data_model import ProducerId
+from caikit.interfaces.vision import data_model as caikit_dm
 import alog
 
 log = alog.use_channel("DATAM")
+
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class ObjectSegment(DataObjectBase):
@@ -37,6 +38,7 @@ class ObjectSegment(DataObjectBase):
     # as a binary image, where 0 is background, and 255 is part of the
     # object to align with HF task definitions.
     mask: Annotated[caikit_dm.Image, FieldNumber(3)]
+
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class ImageSegmentationResult(DataObjectBase):
