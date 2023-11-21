@@ -23,6 +23,7 @@ from caikit.core import TaskBase, task
 
 # Local
 from .image_classification import ImageClassificationResult
+from .image_segmentation import ImageSegmentationResult
 from .object_detection import ObjectDetectionResult
 
 
@@ -46,4 +47,16 @@ class ImageClassificationTask(TaskBase):
     """The image classification task is responsible for taking an input image
     and producing an iterable of objects containing class names and typically
     confidence scores.
+    """
+
+
+@task(
+    required_parameters={"inputs": bytes},
+    output_type=ImageSegmentationResult,
+)
+class ImageSegmentationTask(TaskBase):
+    """The image classification task is responsible for taking an input image
+    and producing a pixel mask with optional class names and confidence scores.
+    Note that at the moment, this task encapsulates all segmentation types,
+    I.e., instance, object, semantic, etc...
     """
