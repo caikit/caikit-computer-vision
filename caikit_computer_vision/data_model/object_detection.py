@@ -24,7 +24,22 @@ from caikit.core import DataObjectBase, dataobject
 from caikit.interfaces.common.data_model import ProducerId
 import alog
 
+# Local
+from .image_segmentation import ObjectSegment
+
 log = alog.use_channel("DATAM")
+
+# Image coordinates - TODO: Probably should standardize what we use for these...
+@dataobject(package="caikit_data_model.caikit_computer_vision")
+class Point2f(DataObjectBase):
+    x: Annotated[float, FieldNumber(1)]
+    y: Annotated[float, FieldNumber(2)]
+
+
+@dataobject(package="caikit_data_model.caikit_computer_vision")
+class Point2d(DataObjectBase):
+    x: Annotated[int, FieldNumber(1)]
+    y: Annotated[int, FieldNumber(2)]
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
@@ -36,10 +51,34 @@ class BoundingBox(DataObjectBase):
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
+class AnomalyRegion(DataObjectBase):
+    score: Annotated[float, FieldNumber(1)]
+    # Bounding box and primary focus area of the detected anomaly;
+    # note that these coordinates are relative to the detected object.
+    box: Annotated[BoundingBox, FieldNumber(2)]
+    anomaly_hotspot: Annotated[Point2d, FieldNumber(3)]
+
+
+@dataobject(package="caikit_data_model.caikit_computer_vision")
+class Anomaly(DataObjectBase):
+    score: Annotated[float, FieldNumber(1)]
+    anomaly_threshold: Annotated[float, FieldNumber(2)]
+    detail_data: Annotated[str, FieldNumber(3)]
+    regions: Annotated[List[AnomalyRegion], FieldNumber(4)]
+
+
+@dataobject(package="caikit_data_model.caikit_computer_vision")
 class DetectedObject(DataObjectBase):
     score: Annotated[float, FieldNumber(1)]
     label: Annotated[str, FieldNumber(2)]
     box: Annotated[BoundingBox, FieldNumber(3)]
+    ### Optional segmentation information
+    # list of pixel coordinates representing the segmentation mask of the object.
+    object_segments: Annotated[List[Point2f], FieldNumber(4)]
+    # Optional run-length encoding of the object being described.
+    rle: Annotated[str, FieldNumber(5)]
+    ### Optional anomaly detection information
+    anomaly: Annotated[Anomaly, FieldNumber(6)]
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
