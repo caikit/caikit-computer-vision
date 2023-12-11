@@ -34,7 +34,12 @@ from caikit.interfaces.vision.data_model.backends import image_pil_backend
 import alog
 
 # Local
-from ...data_model import BoundingBox, DetectedObject, ObjectDetectionResult
+from ...data_model import (
+    BoundingBox,
+    DetectedObject,
+    ObjectDetectionResult,
+    ObjectDetectionTrainSet,
+)
 from ...data_model.tasks import ObjectDetectionTask
 
 log = alog.use_channel("TRANSFORMERS_DETECT")
@@ -184,8 +189,7 @@ class TransformersObjectDetector(ModuleBase):
 
         # .run() operates over a single image, so we only get one pred dict back
         result = self.image_processor.post_process_object_detection(
-            outputs,
-            threshold=threshold,
+            outputs, threshold=threshold, target_sizes=[(inputs.rows, inputs.columns)]
         )[0]
 
         # Convert the result dictionary into a Caikit DM object
@@ -194,8 +198,10 @@ class TransformersObjectDetector(ModuleBase):
         detected_objects = [
             DetectedObject(
                 score=result["scores"][idx].item(),
-                label=result["scores"][idx].item(),
-                box=BoundingBox(*result["boxes"][idx].tolist()),
+                label=str(result["labels"][idx].item()),
+                box=BoundingBox(
+                    *[int(coord) for coord in result["boxes"][idx].tolist()]
+                ),
             )
             for idx in range(num_objects)
         ]
