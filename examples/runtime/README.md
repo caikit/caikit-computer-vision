@@ -57,7 +57,7 @@ To export the `.proto` files, run `python3 dump_protos.py`. This will delete you
 - A file named `openapi.json`
 - Lots of `.proto` files, including an `objectdetectionresult.proto`, which contains the definition for the message type corresponding to the `ObjectDetectionResult` data model class, shown below
 
-```
+```protobuf
 ...
 message ObjectDetectionResult {
   repeated caikit_data_model.caikit_computer_vision.DetectedObject detected_objects = 1;
@@ -92,7 +92,7 @@ The declaration of `.run()` for the transformer-based module is shown below:
 ```
 Where `image_pil_backend.PIL_SOURCE_TYPES` is a union of types that can be resolved into a PIL image, one of which is `bytes`. As such, the `.run()` declaration is compatible with the task declaration; because of the way the task is defined, the runtime expects `inputs` to be of type `bytes`, with `threshold` as an optional float parameter. This is exactly what is defined in the `objectdetectiontaskrequest.proto` file, shown below.
 
-```
+```protobuf
 ...
 message ObjectDetectionTaskRequest {
   bytes inputs = 1;
@@ -147,7 +147,7 @@ where:
 - `{{impl_class_name}}` is the name of  the implementing module class being considered, in this cases `transformersobjectdetector`
 
 As a result we get a file named: `objectdetectiontasktransformersobjectdetectortrainrequest.proto`, which contains the message definition to trigger a train request.
-```
+```protobuf
 message ObjectDetectionTaskTransformersObjectDetectorTrainRequest {
   string model_name = 1;
   caikit_data_model.common.S3Path output_path = 2;
@@ -164,14 +164,16 @@ Notice that the first two fields are special; `model_name` is the model ID that 
 Now that we understand what messages are created by which parts of the Python data model / module code and the naming conventions that they follow, we can talk about the gRPC services. There are two; one for inference, and one for training.
 
 The inference service is contained in: `computervisionservice.proto`
-```
+```protobuf
+...
 service ComputerVisionService {
   rpc ObjectDetectionTaskPredict(caikit.runtime.ComputerVision.ObjectDetectionTaskRequest) returns (caikit_data_model.caikit_computer_vision.ObjectDetectionResult);
 }
 ```
 
 And the train service is contained in: `computervisiontrainingservice.proto`
-```
+```protobuf
+...
 service ComputerVisionTrainingService {
   rpc ObjectDetectionTaskTransformersObjectDetectorTrain(caikit.runtime.ComputerVision.ObjectDetectionTaskTransformersObjectDetectorTrainRequest) returns (caikit_data_model.runtime.TrainingJob);
 }
