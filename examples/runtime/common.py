@@ -1,13 +1,19 @@
-import os
+# Standard
 from pathlib import Path
+import os
 import sys
+
+# Third Party
 import yaml
 
 # Add caikit computer vision to the syspath
 PROJECT_ROOT = os.path.join(Path(__file__).parent.parent.parent)
 sys.path.append(PROJECT_ROOT)
+# Standard
 # Make sure we can import without issue
 import os
+
+# Local
 import caikit_computer_vision
 
 # Constants that are generally useful most places

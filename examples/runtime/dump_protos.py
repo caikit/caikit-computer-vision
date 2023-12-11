@@ -4,21 +4,22 @@ is helpful for understanding the API for the REST / gRPC servers.
 
 # Standard
 from pathlib import Path
+from shutil import rmtree
 import json
 import os
 import shutil
 import sys
 import tempfile
-from shutil import rmtree
+
+# Third Party
+from common import PROTO_EXPORT_DIR, RUNTIME_CONFIG
 import yaml
 
 # First Party
-import alog
-
-# Local
 from caikit.runtime.dump_services import dump_grpc_services, dump_http_services
+import alog
 import caikit
-from common import PROTO_EXPORT_DIR, RUNTIME_CONFIG
+
 
 def export_protos():
     # Make caikit_computer_vision available for import
@@ -29,6 +30,7 @@ def export_protos():
     # Dump proto files
     dump_grpc_services(output_dir=PROTO_EXPORT_DIR)
     dump_http_services(output_dir=PROTO_EXPORT_DIR)
+
 
 if __name__ == "__main__":
     export_protos()

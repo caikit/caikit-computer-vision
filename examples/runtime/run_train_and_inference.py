@@ -19,22 +19,31 @@ from pathlib import Path
 from time import sleep
 import os
 import sys
-from caikit.interfaces.vision import data_model as caikit_dm
 
 # Third Party
-import grpc
-import numpy as np
+from common import (
+    DEMO_MODEL_ID,
+    MODELS_DIR,
+    TRAINING_DATA_DIR,
+    TRAINING_IMG_DIR,
+    TRAINING_LABELS_FILE,
+)
 
-# Local
 # pylint: disable=no-name-in-module,import-error
 from generated import (
     computervisionservice_pb2_grpc,
     computervisiontrainingservice_pb2_grpc,
-    objectdetectiontrainset_pb2,
+    objectdetectiontaskrequest_pb2,
 )
-from generated import objectdetectiontasktransformersobjectdetectortrainrequest_pb2 as odt_request_pb2
-from generated import objectdetectiontaskrequest_pb2
-from common import TRAINING_DATA_DIR, TRAINING_IMG_DIR, TRAINING_LABELS_FILE, MODELS_DIR, DEMO_MODEL_ID
+from generated import (
+    objectdetectiontasktransformersobjectdetectortrainrequest_pb2 as odt_request_pb2,
+)
+from generated import objectdetectiontrainset_pb2
+import grpc
+import numpy as np
+
+# First Party
+from caikit.interfaces.vision import data_model as caikit_dm
 
 if __name__ == "__main__":
     model_id = "new_model"
@@ -54,8 +63,10 @@ if __name__ == "__main__":
         num_epochs=10,
         learning_rate=0.3,
     )
-    training_stub = computervisiontrainingservice_pb2_grpc.ComputerVisionTrainingServiceStub(
-        channel=channel
+    training_stub = (
+        computervisiontrainingservice_pb2_grpc.ComputerVisionTrainingServiceStub(
+            channel=channel
+        )
     )
     response = training_stub.ObjectDetectionTaskTransformersObjectDetectorTrain(request)
     print("*" * 30)
@@ -75,7 +86,9 @@ if __name__ == "__main__":
         inputs=im_bytes,
         threshold=0.5,
     )
-    inference_stub = computervisionservice_pb2_grpc.ComputerVisionServiceStub(channel=channel)
+    inference_stub = computervisionservice_pb2_grpc.ComputerVisionServiceStub(
+        channel=channel
+    )
     # NOTE: This just hits the old model, since normally the loading would be handled by something
     # like kserve/model mesh. But it might be more helpful to show how to manually load the model
     # and hit it here, just for reference.

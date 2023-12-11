@@ -22,6 +22,5 @@ model_management:
   finders:
     default:
       type: LOCAL
-
 # To start the server:
 # env CONFIG_FILES=./runtime_config.yaml python -m caikit.runtime
