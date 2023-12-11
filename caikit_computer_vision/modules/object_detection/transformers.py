@@ -22,13 +22,7 @@ from transformers import AutoImageProcessor, AutoModelForObjectDetection
 
 # First Party
 from caikit.core.exceptions import error_handler
-from caikit.core.modules import (
-    ModuleBase,
-    ModuleConfig,
-    ModuleLoader,
-    ModuleSaver,
-    module,
-)
+from caikit.core.modules import ModuleBase, ModuleConfig, ModuleSaver, module
 from caikit.interfaces.vision import data_model as caikit_dm
 from caikit.interfaces.vision.data_model.backends import image_pil_backend
 import alog
@@ -212,7 +206,7 @@ class TransformersObjectDetector(ModuleBase):
     def train(
         cls,
         model_path: str,
-        train_data: ObjectDetectionTrainSet,
+        train_data: ObjectDetectionTrainSet,  # pylint: disable=W0613
         num_epochs: int,
         learning_rate: float,
     ) -> "TransformersObjectDetector":
@@ -221,7 +215,4 @@ class TransformersObjectDetector(ModuleBase):
         nothing, just so we can demonstrate the interface.
         """
         log.debug("STUB - Training detector")
-        log.debug("model_path [base]: ", model_path)
-        log.debug("num_epochs: ", num_epochs)
-        log.debug("learning_rate: ", learning_rate)
         return cls.load(model_path)
