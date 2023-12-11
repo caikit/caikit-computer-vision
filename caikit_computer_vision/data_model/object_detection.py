@@ -46,3 +46,9 @@ class DetectedObject(DataObjectBase):
 class ObjectDetectionResult(DataObjectBase):
     detected_objects: Annotated[List[DetectedObject], FieldNumber(1)]
     producer_id: Annotated[ProducerId, FieldNumber(2)]
+
+
+@dataobject(package="caikit_data_model.caikit_computer_vision")
+class ObjectDetectionTrainSet(DataObjectBase):
+    img_dir_path: str
+    labels_file: str

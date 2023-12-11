@@ -22,19 +22,18 @@ from transformers import AutoImageProcessor, AutoModelForObjectDetection
 
 # First Party
 from caikit.core.exceptions import error_handler
-from caikit.core.modules import (
-    ModuleBase,
-    ModuleConfig,
-    ModuleLoader,
-    ModuleSaver,
-    module,
-)
+from caikit.core.modules import ModuleBase, ModuleConfig, ModuleSaver, module
 from caikit.interfaces.vision import data_model as caikit_dm
 from caikit.interfaces.vision.data_model.backends import image_pil_backend
 import alog
 
 # Local
-from ...data_model import BoundingBox, DetectedObject, ObjectDetectionResult
+from ...data_model import (
+    BoundingBox,
+    DetectedObject,
+    ObjectDetectionResult,
+    ObjectDetectionTrainSet,
+)
 from ...data_model.tasks import ObjectDetectionTask
 
 log = alog.use_channel("TRANSFORMERS_DETECT")
@@ -184,8 +183,7 @@ class TransformersObjectDetector(ModuleBase):
 
         # .run() operates over a single image, so we only get one pred dict back
         result = self.image_processor.post_process_object_detection(
-            outputs,
-            threshold=threshold,
+            outputs, threshold=threshold, target_sizes=[(inputs.rows, inputs.columns)]
         )[0]
 
         # Convert the result dictionary into a Caikit DM object
@@ -194,10 +192,27 @@ class TransformersObjectDetector(ModuleBase):
         detected_objects = [
             DetectedObject(
                 score=result["scores"][idx].item(),
-                label=result["scores"][idx].item(),
-                box=BoundingBox(*result["boxes"][idx].tolist()),
+                label=str(result["labels"][idx].item()),
+                box=BoundingBox(
+                    *[int(coord) for coord in result["boxes"][idx].tolist()]
+                ),
             )
             for idx in range(num_objects)
         ]
 
         return ObjectDetectionResult(detected_objects=detected_objects)
+
+    @classmethod
+    def train(
+        cls,
+        model_path: str,
+        train_data: ObjectDetectionTrainSet,  # pylint: disable=W0613
+        num_epochs: int,
+        learning_rate: float,
+    ) -> "TransformersObjectDetector":
+        """Stub for train for demonstration purposes through runtime; currently
+        this is essentially an alias to load with some passable params that do
+        nothing, just so we can demonstrate the interface.
+        """
+        log.debug("STUB - Training detector")
+        return cls.load(model_path)

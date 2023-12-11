@@ -15,9 +15,6 @@
 This module holds the Task definitions for all common vision tasks
 """
 
-# Standard
-from typing import Iterable
-
 # First Party
 from caikit.core import TaskBase, task
 
