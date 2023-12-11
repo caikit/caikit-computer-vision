@@ -207,3 +207,21 @@ class TransformersObjectDetector(ModuleBase):
         ]
 
         return ObjectDetectionResult(detected_objects=detected_objects)
+
+    @classmethod
+    def train(
+        cls,
+        model_path: str,
+        train_data: ObjectDetectionTrainSet,
+        num_epochs: int,
+        learning_rate: float,
+    ) -> "TransformersObjectDetector":
+        """Stub for train for demonstration purposes through runtime; currently
+        this is essentially an alias to load with some passable params that do
+        nothing, just so we can demonstrate the interface.
+        """
+        log.debug("STUB - Training detector")
+        log.debug("model_path [base]: ", model_path)
+        log.debug("num_epochs: ", num_epochs)
+        log.debug("learning_rate: ", learning_rate)
+        return cls.load(model_path)
