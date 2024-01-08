@@ -1,0 +1,26 @@
+# its contents configure the TGIS server & caikit; currently
+# we don't have anything that needs to run in the JVM for caikit
+# computer vision yet.
+jvm_options: []
+
+runtime:
+  library: caikit_computer_vision
+  local_models_dir: models
+  lazy_load_local_models": True
+  grpc:
+    enabled: True
+  http:
+    enabled: True
+  training:
+    save_with_id: False
+    output_dir: models
+
+log:
+  formatter: pretty # optional: log formatter is set to json by default
+
+model_management:
+  finders:
+    default:
+      type: LOCAL
+# To start the server:
+# env CONFIG_FILES=./runtime_config.yaml python -m caikit.runtime
