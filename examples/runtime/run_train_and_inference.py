@@ -84,7 +84,7 @@ if __name__ == "__main__":
         im_bytes = f.read()
     request = objectdetectiontaskrequest_pb2.ObjectDetectionTaskRequest(
         inputs=im_bytes,
-        threshold=0.5,
+        threshold=0.0,
     )
     inference_stub = computervisionservice_pb2_grpc.ComputerVisionServiceStub(
         channel=channel
