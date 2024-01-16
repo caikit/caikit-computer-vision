@@ -15,7 +15,7 @@ classifiers=[
 ]
 dependencies = [
     "caikit[runtime-grpc,runtime-http,interfaces-vision]==0.16.0",
-    "py-to-proto==0.4.1",
+    "py-to-proto==0.5.2",
     "transformers>=4.27.1,<5",
     "torch>2.0,<3",
     "timm>=0.9.5,<1"
