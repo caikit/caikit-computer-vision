@@ -30,45 +30,103 @@ from common import (
 )
 
 # pylint: disable=no-name-in-module,import-error
-from generated import (
-    computervisionservice_pb2_grpc,
-    computervisiontrainingservice_pb2_grpc,
-    objectdetectiontaskrequest_pb2,
-)
-from generated import (
-    objectdetectiontasktransformersobjectdetectortrainrequest_pb2 as odt_request_pb2,
-)
-from generated import objectdetectiontrainset_pb2
+try:
+    # Third Party
+    from generated import (
+        computervisionservice_pb2_grpc,
+        computervisiontrainingservice_pb2_grpc,
+    )
+except ImportError:
+    raise ImportError("Failed to import cv service; did you compile your protos?")
+
+# The location of these imported message types depends on the version of Caikit
+# that we are using.
+try:
+    # Third Party
+    from generated.caikit_data_model.caikit_computer_vision import (
+        objectdetectiontrainset_pb2,
+    )
+    from generated.ccv import objectdetectiontaskrequest_pb2
+    from generated.ccv import (
+        objectdetectiontasktransformersobjectdetectortrainparameters_pb2 as odt_params_pb2,
+    )
+    from generated.ccv import (
+        objectdetectiontasktransformersobjectdetectortrainrequest_pb2 as odt_request_pb2,
+    )
+
+    IS_LEGACY = False
+except ModuleNotFoundError:
+    # older versions of Caikit / py to proto create a flat proto structure
+    # Third Party
+    from generated import objectdetectiontaskrequest_pb2
+    from generated import (
+        objectdetectiontasktransformersobjectdetectortrainrequest_pb2 as odt_request_pb2,
+    )
+    from generated import objectdetectiontrainset_pb2
+
+    IS_LEGACY = True
+
+# Third Party
 import grpc
 import numpy as np
 
 # First Party
 from caikit.interfaces.vision import data_model as caikit_dm
 
+
+### build the training request
+# Training params; the only thing that changes between newer/older versions of caikit is that
+# newer caikit versions pass all of these in under a parameters key and proto type, while old
+# versions just pass them in directly.
+def get_train_request():
+    train_param_dict = {
+        "model_path": os.path.join(MODELS_DIR, DEMO_MODEL_ID),
+        "train_data": objectdetectiontrainset_pb2.ObjectDetectionTrainSet(
+            img_dir_path=TRAINING_IMG_DIR,
+            labels_file=TRAINING_LABELS_FILE,
+        ),
+        "num_epochs": 10,
+        "learning_rate": 0.3,
+    }
+    if not IS_LEGACY:
+        train_param_dict = {
+            "parameters": odt_params_pb2.ObjectDetectionTaskTransformersObjectDetectorTrainParameters(
+                **train_param_dict
+            )
+        }
+    return odt_request_pb2.ObjectDetectionTaskTransformersObjectDetectorTrainRequest(
+        model_name="new_model", **train_param_dict
+    )
+
+
+### Build the inference request
+def get_inference_request():
+    # For inference, just pick a random training image
+    random_img_name = np.random.choice(os.listdir(TRAINING_IMG_DIR))
+    with open(os.path.join(TRAINING_IMG_DIR, random_img_name), "rb") as f:
+        im_bytes = f.read()
+
+    return objectdetectiontaskrequest_pb2.ObjectDetectionTaskRequest(
+        inputs=im_bytes,
+        threshold=0,
+    )
+
+
 if __name__ == "__main__":
-    model_id = "new_model"
 
     # Setup the client
     port = 8085
     channel = grpc.insecure_channel(f"localhost:{port}")
 
     # send train request
-    request = odt_request_pb2.ObjectDetectionTaskTransformersObjectDetectorTrainRequest(
-        model_name=model_id,
-        model_path=os.path.join(MODELS_DIR, DEMO_MODEL_ID),
-        train_data=objectdetectiontrainset_pb2.ObjectDetectionTrainSet(
-            img_dir_path=TRAINING_IMG_DIR,
-            labels_file=TRAINING_LABELS_FILE,
-        ),
-        num_epochs=10,
-        learning_rate=0.3,
-    )
     training_stub = (
         computervisiontrainingservice_pb2_grpc.ComputerVisionTrainingServiceStub(
             channel=channel
         )
     )
-    response = training_stub.ObjectDetectionTaskTransformersObjectDetectorTrain(request)
+    response = training_stub.ObjectDetectionTaskTransformersObjectDetectorTrain(
+        get_train_request()
+    )
     print("*" * 30)
     print("RESPONSE from TRAIN gRPC\n")
     print(response)
@@ -76,16 +134,6 @@ if __name__ == "__main__":
 
     sleep(5)
 
-    # Then make sure we can hit the new model with an inference request...
-    # TODO: transformers does not seem happy is this is a png
-    random_img_name = np.random.choice(os.listdir(TRAINING_IMG_DIR))
-
-    with open(os.path.join(TRAINING_IMG_DIR, random_img_name), "rb") as f:
-        im_bytes = f.read()
-    request = objectdetectiontaskrequest_pb2.ObjectDetectionTaskRequest(
-        inputs=im_bytes,
-        threshold=0.0,
-    )
     inference_stub = computervisionservice_pb2_grpc.ComputerVisionServiceStub(
         channel=channel
     )
@@ -93,7 +141,7 @@ if __name__ == "__main__":
     # like kserve/model mesh. But it might be more helpful to show how to manually load the model
     # and hit it here, just for reference.
     response = inference_stub.ObjectDetectionTaskPredict(
-        request, metadata=[("mm-model-id", DEMO_MODEL_ID)], timeout=1
+        get_inference_request(), metadata=[("mm-model-id", DEMO_MODEL_ID)], timeout=1
     )
     print("*" * 30)
     print("RESPONSE from INFERENCE gRPC\n")

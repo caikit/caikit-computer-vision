@@ -16,6 +16,7 @@ is helpful for understanding the API for the REST / gRPC servers.
 """
 
 # Standard
+from inspect import signature
 from pathlib import Path
 from shutil import rmtree
 import json
@@ -40,8 +41,19 @@ def export_protos():
         rmtree(PROTO_EXPORT_DIR)
     # Configure caikit runtime
     caikit.config.configure(config_dict=RUNTIME_CONFIG)
-    # Dump proto files
-    dump_grpc_services(output_dir=PROTO_EXPORT_DIR)
+    # Export gRPC services first...
+    # grpc service dumper kwargs depend on the version of caikit we are using
+    grpc_service_dumper_kwargs = {
+        "output_dir": PROTO_EXPORT_DIR,
+        "write_modules_file": True,
+    }
+    # Only keep things in the signature, e.g., old versions don't take write_modules_file
+    expected_grpc_params = signature(dump_grpc_services).parameters
+    grpc_service_dumper_kwargs = {
+        k: v for k, v in grpc_service_dumper_kwargs.items() if k in expected_grpc_params
+    }
+    dump_grpc_services(**grpc_service_dumper_kwargs)
+    # Then export HTTP services...
     dump_http_services(output_dir=PROTO_EXPORT_DIR)
 
 
