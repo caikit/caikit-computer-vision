@@ -60,7 +60,11 @@ class ObjectDetectionResult(DataObjectBase):
 To export the `.proto` files, run `python3 dump_protos.py`. This will delete your existing `protos` directory and recreate it. Inspecting the contents of the `protos` folder; you should see the following:
 
 - A file named `openapi.json`
-- Lots of `.proto` files, including an `objectdetectionresult.proto`, which contains the definition for the message type corresponding to the `ObjectDetectionResult` data model class, shown below
+- Lots of `.proto` files, including one of the following:
+  - More recent versions of Caikit: `caikit_data_model.caikit_computer_vision.objectdetectionresult.proto`
+  - Older versions of Caikit: `objectdetectionresult.proto`
+
+Regardless of its name, this file contains the `ObjectDetectionResult` data model class, shown below:
 
 ```protobuf
 ...
@@ -99,7 +103,10 @@ The declaration of `.run()` for the transformer-based module is shown below:
     ) -> ObjectDetectionResult:
 ```
 
-Where `image_pil_backend.PIL_SOURCE_TYPES` is a union of types that can be resolved into a PIL image, one of which is `bytes`. As such, the `.run()` declaration is compatible with the task declaration; because of the way the task is defined, the runtime expects `inputs` to be of type `bytes`, with `threshold` as an optional float parameter. This is exactly what is defined in the `objectdetectiontaskrequest.proto` file, shown below.
+Where `image_pil_backend.PIL_SOURCE_TYPES` is a union of types that can be resolved into a PIL image, one of which is `bytes`. As such, the `.run()` declaration is compatible with the task declaration; because of the way the task is defined, the runtime expects `inputs` to be of type `bytes`, with `threshold` as an optional float parameter. We can find the message type defining exactly this in the task request definition proto file, which is one of the following:
+
+- More recent versions of Caikit: `ccv.objectdetectiontaskrequest.proto`; here, ccv is the `service_generation` name defined in our runtime config
+- Older versions of Caikit: `objectdetectiontaskrequest.proto`
 
 ```protobuf
 ...
@@ -137,7 +144,7 @@ Notice that here, `threshold` was changed to a `str` which causes a type collisi
 Cannot generate task rpc for <class 'caikit_computer_vision.data_model.tasks.ObjectDetectionTask'>: Conflicting value types for arg threshold: <class 'str'> != <class 'float'>
 ```
 
-and you won't have a `objectdetectiontaskrequest.proto` in the dumped protos.
+and you won't have a `ccv.objectdetectiontaskrequest.proto`/`objectdetectiontaskrequest.proto` in the dumped protos.
 
 #### Train Messages
 
@@ -157,13 +164,19 @@ Currently, the stub example for `.train` on the object detector class is defined
 ```
 
 Where `ObjectDetectionTrainSet` is a data model object. The train message file name is built with the following name, in all lowercase letters:
-`{{task_name}}task{{impl_class_name}}trainrequest.proto`
+`{{service_gen_name}}.{{task_name}}task{{impl_class_name}}trainrequest.proto`
 where:
 
+- `{{service_gen_name}}` is the name of your service generation key from your runtime config, e.g., `ccv` As before, this is only used for more recent versions of Caikit; in older versions, the leading `{{service_gen_name}}.` is omitted.
 - `{{task_name}}` is the name of the task, in this case `objectdetection`
 - `{{impl_class_name}}` is the name of the implementing module class being considered, in this cases `transformersobjectdetector`
 
-As a result we get a file named: `objectdetectiontasktransformersobjectdetectortrainrequest.proto`, which contains the message definition to trigger a train request.
+As a result we get a file named one of the following:
+
+- More recent versions of Caikit: `ccv.objectdetectiontasktransformersobjectdetectortrainrequest.proto`
+- Older versions of Caikit: `objectdetectiontasktransformersobjectdetectortrainrequest.proto`
+
+which contains the message definition to trigger a train request.
 
 ```protobuf
 message ObjectDetectionTaskTransformersObjectDetectorTrainRequest {
