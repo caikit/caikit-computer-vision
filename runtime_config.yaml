@@ -14,6 +14,10 @@ runtime:
   training:
     save_with_id: False
     output_dir: models
+  # This should be set to something that is NOT in your site packages, otherwise it'll cause
+  # conflicts leading to import issues. For now, we set ccv for caikit computer vision.
+  service_generation:
+    package: ccv
 
 log:
   formatter: pretty # optional: log formatter is set to json by default
