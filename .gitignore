@@ -172,6 +172,9 @@ demo/train_output/
 # Demo runtime files and folders that may be autocreated
 examples/runtime/generated/*_pb2.py
 examples/runtime/generated/*_pb2_grpc.py
+examples/runtime/generated/ccv
+examples/runtime/generated/caikit_data_model
+examples/runtime/modules.json
 examples/runtime/models
 examples/runtime/protos
 examples/runtime/train_data
