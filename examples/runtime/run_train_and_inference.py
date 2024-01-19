@@ -101,13 +101,18 @@ def get_train_request():
 
 ### Build the inference request
 def get_inference_request():
+    """Build an inference request. Here, not that `inputs` is a oneof; the corresponding
+    proto class takes args named inputs_<type>. While we pass bytes as the arg here,
+    we could equivalently pass the following arg instead of inputs_bytes:
+         inputs_str=os.path.join(TRAINING_IMG_DIR, random_img_name)
+    """
     # For inference, just pick a random training image
     random_img_name = np.random.choice(os.listdir(TRAINING_IMG_DIR))
     with open(os.path.join(TRAINING_IMG_DIR, random_img_name), "rb") as f:
         im_bytes = f.read()
 
     return objectdetectiontaskrequest_pb2.ObjectDetectionTaskRequest(
-        inputs=im_bytes,
+        inputs_bytes=im_bytes,
         threshold=0,
     )
 
