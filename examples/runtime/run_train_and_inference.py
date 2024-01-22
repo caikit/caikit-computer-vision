@@ -44,6 +44,8 @@ except ImportError:
 try:
     # Third Party
     from generated.caikit_data_model.caikit_computer_vision import (
+        flatchannel_pb2,
+        flatimage_pb2,
         objectdetectiontrainset_pb2,
     )
     from generated.ccv import objectdetectiontaskrequest_pb2
@@ -67,6 +69,7 @@ except ModuleNotFoundError:
     IS_LEGACY = True
 
 # Third Party
+from PIL import Image
 import grpc
 import numpy as np
 
@@ -102,17 +105,34 @@ def get_train_request():
 ### Build the inference request
 def get_inference_request():
     """Build an inference request. Here, not that `inputs` is a oneof; the corresponding
-    proto class takes args named inputs_<type>. While we pass bytes as the arg here,
-    we could equivalently pass the following arg instead of inputs_bytes:
-         inputs_str=os.path.join(TRAINING_IMG_DIR, random_img_name)
+    proto class takes args named inputs_<type>. While we pass a flattened image as the arg
+    here, we could equivalently pass the following args:
+
+    Passing a path:
+        ...
+            inputs_str=os.path.join(TRAINING_IMG_DIR, random_img_name)
+
+    Passing bytes:
+        with open(os.path.join(TRAINING_IMG_DIR, random_img_name), "rb") as f:
+            im_bytes = f.read()
+        ...
+            input_bytes = im_bytes
     """
-    # For inference, just pick a random training image
+    # For inference, just pick a random training image and read it as a BGR np arr
     random_img_name = np.random.choice(os.listdir(TRAINING_IMG_DIR))
-    with open(os.path.join(TRAINING_IMG_DIR, random_img_name), "rb") as f:
-        im_bytes = f.read()
+    random_img = np.array(Image.open(os.path.join(TRAINING_IMG_DIR, random_img_name)))
+    # Build the flattened channels
+    flat_channels = [
+        flatchannel_pb2.FlatChannel(values=random_img[:, :, ch_idx].flatten())
+        for ch_idx in range(random_img.shape[-1])
+    ]
+    # And from the flattened channels, build the flat image
+    flat_image = flatimage_pb2.FlatImage(
+        flat_channels=flat_channels, image_shape=random_img.shape
+    )
 
     return objectdetectiontaskrequest_pb2.ObjectDetectionTaskRequest(
-        inputs_bytes=im_bytes,
+        inputs_flatimage=flat_image,
         threshold=0,
     )
 
