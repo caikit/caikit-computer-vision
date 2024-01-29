@@ -24,10 +24,8 @@ from caikit.core import DataObjectBase, dataobject
 from caikit.interfaces.common.data_model import ProducerId
 import alog
 
-# Local
-from .image_segmentation import ObjectSegment
-
 log = alog.use_channel("DATAM")
+
 
 # Image coordinates - TODO: Probably should standardize what we use for these...
 @dataobject(package="caikit_data_model.caikit_computer_vision")
