@@ -22,40 +22,38 @@ backend / its corresponding types.
 from typing import List
 
 # Third Party
-import numpy as np
 from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
+import numpy as np
 
 # First Party
-import alog
 from caikit.core import DataObjectBase, dataobject
-from caikit.interfaces.common.data_model import ProducerId
 from caikit.core.exceptions import error_handler
+from caikit.interfaces.common.data_model import ProducerId
+import alog
 
 log = alog.use_channel("DATAM")
 error = error_handler.get(log)
 
+
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class FlatChannel(DataObjectBase):
     """A flat array of values representing a single channel in an image."""
+
     values: Annotated[List[np.uint32], FieldNumber(1)]
 
     def __post_init__(self):
-        error.type_check(
-            "CCV81813713E",
-            tuple,
-            list,
-            values=self.values
-        )
+        error.type_check("<CCV81813713E>", tuple, list, values=self.values)
         error.value_check(
             "<CCV81819292E>",
             not self.values or (max(self.values) < 256 and min(self.values) >= 0),
-            "Flat channel values must be of type uint8"
+            "Flat channel values must be of type uint8",
         )
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class FlatImage(DataObjectBase):
     """A series of flattened arrays & an image shape."""
+
     flat_channels: Annotated[List[FlatChannel], FieldNumber(1)]
     image_shape: Annotated[List[np.uint32], FieldNumber(2)]
 
@@ -65,7 +63,7 @@ class FlatImage(DataObjectBase):
         error.value_check(
             "<CCV80491785E>",
             len(set(channel_lengths)) == 1,
-            "All channels must have the same length!"
+            "All channels must have the same length!",
         )
 
         # The image shape should be of length 3, and should contain
@@ -76,5 +74,40 @@ class FlatImage(DataObjectBase):
         error.value_check(
             "<CCV80910185E>",
             num_channel_elems == expected_channel_elems,
-            "Number of channel elements must match number of elements in provided shape"
+            "Number of channel elements must match number of elements in provided shape",
         )
+
+    @classmethod
+    def from_numpy(cls, np_arr: np.ndarray) -> "FlatImage":
+        """Builds a flattened image out of a numpy array.
+
+        Args:
+            FlatImage
+                An instance of this class that is serializable.
+        """
+        # Build the flattened channels
+        flat_channels = [
+            FlatChannel(values=np_arr[:, :, ch_idx].flatten().tolist())
+            for ch_idx in range(np_arr.shape[-1])
+        ]
+        # And from the flattened channels, build the flat image
+        return cls(flat_channels=flat_channels, image_shape=np_arr.shape)
+
+    def to_numpy(self) -> np.ndarray:
+        """Converts the flattened image to a numpy array. This is accomplished by
+        reconstructing each flattened channel, then stacking along the new channel
+        axis.
+
+        Returns:
+            np.ndarray
+                BGR numpy array representing the flattened image.
+        """
+        # Individually reconstruct each channel, each of which
+        # were flattened in row major order...
+        channel_shape = self.image_shape[:2]
+        rebuilt_channels = [
+            np.array(ch.values, dtype=np.uint8).reshape(channel_shape)
+            for ch in self.flat_channels
+        ]
+        # And stack the reconstructed channels along a new channel axis
+        return np.stack(rebuilt_channels, axis=2)
