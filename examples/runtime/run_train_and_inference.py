@@ -121,9 +121,9 @@ def get_inference_request():
     # For inference, just pick a random training image and read it as a BGR np arr
     random_img_name = np.random.choice(os.listdir(TRAINING_IMG_DIR))
     random_img = np.array(Image.open(os.path.join(TRAINING_IMG_DIR, random_img_name)))
-    # Build the flattened channels
+    # Build the flattened channels; this is the same as from_numpy() on the flat image DM class
     flat_channels = [
-        flatchannel_pb2.FlatChannel(values=random_img[:, :, ch_idx].flatten())
+        flatchannel_pb2.FlatChannel(values=random_img[:, :, ch_idx].flatten().tolist())
         for ch_idx in range(random_img.shape[-1])
     ]
     # And from the flattened channels, build the flat image
