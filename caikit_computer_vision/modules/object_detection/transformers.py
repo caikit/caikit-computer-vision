@@ -184,9 +184,7 @@ class TransformersObjectDetector(ModuleBase):
         # convert it into a numpy array, then rely on the numpy coersion logic.
         # TODO: Port to caikit and initialize the DM directly with the flat image.
         if isinstance(inputs, FlatImage):
-            inputs = np.array(
-                [ch.values for ch in inputs.flat_channels], dtype=np.uint8
-            ).reshape(inputs.image_shape)
+            inputs = inputs.to_numpy()
 
         # Coerce to a caikit Image
         if not isinstance(inputs, caikit_dm.Image):
