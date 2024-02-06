@@ -14,11 +14,12 @@
 """Module for transformers object detector transformer models.
 """
 # Standard
-from typing import Union
+from typing import Union, get_args
 import os
 
 # Third Party
 from transformers import AutoImageProcessor, AutoModelForObjectDetection
+import numpy as np
 
 # First Party
 from caikit.core.exceptions import error_handler
@@ -31,6 +32,7 @@ import alog
 from ...data_model import (
     BoundingBox,
     DetectedObject,
+    FlatImage,
     ObjectDetectionResult,
     ObjectDetectionTrainSet,
 )
@@ -38,6 +40,13 @@ from ...data_model.tasks import ObjectDetectionTask
 
 log = alog.use_channel("TRANSFORMERS_DETECT")
 error = error_handler.get(log)
+
+# First Party
+from caikit.interfaces.vision.data_model.backends import image_pil_backend
+
+SUPPORTED_INFERENCE_TYPES = Union[
+    tuple(list(get_args(image_pil_backend.PIL_SOURCE_TYPES)) + [FlatImage])
+]
 
 
 @module(
@@ -153,7 +162,7 @@ class TransformersObjectDetector(ModuleBase):
         return cls(model_name, image_processor, detector_model)
 
     def run(
-        self, inputs: image_pil_backend.PIL_SOURCE_TYPES, threshold: float = 0.5
+        self, inputs: SUPPORTED_INFERENCE_TYPES, threshold: float = 0.5
     ) -> ObjectDetectionResult:
         """Run inference on a single image.
 
@@ -170,6 +179,12 @@ class TransformersObjectDetector(ModuleBase):
             ObjectDetectionResult
                 Bounding box predictions for this image.
         """
+        # If we have a FlatImage, we currently have to handle it separately, since we have
+        # not added coersion support for it into the caikit image yet. To do this, we just
+        # convert it into a numpy array, then rely on the numpy coersion logic.
+        # TODO: Port to caikit and initialize the DM directly with the flat image.
+        if isinstance(inputs, FlatImage):
+            inputs = inputs.to_numpy()
 
         # Coerce to a caikit Image
         if not isinstance(inputs, caikit_dm.Image):

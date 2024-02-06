@@ -15,10 +15,14 @@
 This module holds the Task definitions for all common vision tasks
 """
 
+# Standard
+from typing import Union
+
 # First Party
 from caikit.core import TaskBase, task
 
 # Local
+from .flat_image import FlatImage
 from .image_classification import ImageClassificationResult
 from .image_segmentation import ImageSegmentationResult
 from .object_detection import ObjectDetectionResult
@@ -26,7 +30,7 @@ from .object_detection import ObjectDetectionResult
 
 # TODO - add support for image DM primitives
 @task(
-    required_parameters={"inputs": bytes},
+    required_parameters={"inputs": Union[bytes, str, FlatImage]},
     output_type=ObjectDetectionResult,
 )
 class ObjectDetectionTask(TaskBase):
@@ -37,7 +41,7 @@ class ObjectDetectionTask(TaskBase):
 
 
 @task(
-    required_parameters={"inputs": bytes},
+    required_parameters={"inputs": Union[bytes, str, FlatImage]},
     output_type=ImageClassificationResult,
 )
 class ImageClassificationTask(TaskBase):
@@ -48,7 +52,7 @@ class ImageClassificationTask(TaskBase):
 
 
 @task(
-    required_parameters={"inputs": bytes},
+    required_parameters={"inputs": Union[bytes, str, FlatImage]},
     output_type=ImageSegmentationResult,
 )
 class ImageSegmentationTask(TaskBase):

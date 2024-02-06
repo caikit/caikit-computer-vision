@@ -20,7 +20,11 @@ import numpy as np
 import pytest
 
 # Local
-from caikit_computer_vision.data_model import ObjectDetectionResult
+from caikit_computer_vision.data_model import (
+    FlatChannel,
+    FlatImage,
+    ObjectDetectionResult,
+)
 from caikit_computer_vision.modules.object_detection import TransformersObjectDetector
 from tests.fixtures import (
     TRANSFORMER_OBJ_DETECT_MODEL,
@@ -29,11 +33,21 @@ from tests.fixtures import (
 
 
 ## Tests #######################################################################
-def test_bootstrap_and_run():
+@pytest.mark.parametrize(
+    "inputs",
+    [
+        np.ones((3, 3, 3), dtype=np.uint8),
+        FlatImage(
+            flat_channels=[FlatChannel([1] * 9) for x in range(3)],
+            image_shape=[3, 3, 3],
+        ),
+    ],
+)
+def test_bootstrap_and_run(inputs):
     """Ensure that we can bootstrap a model & run inference on it."""
     model = TransformersObjectDetector.bootstrap(TRANSFORMER_OBJ_DETECT_MODEL)
     assert isinstance(model, TransformersObjectDetector)
-    preds = model.run(np.ones((3, 3, 3), dtype=np.uint8))
+    preds = model.run(inputs)
     assert isinstance(preds, ObjectDetectionResult)
 
 

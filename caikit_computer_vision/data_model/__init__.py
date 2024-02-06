@@ -14,6 +14,7 @@
 
 # Local
 from . import image_classification, image_segmentation, object_detection, tasks
+from .flat_image import *
 from .image_classification import *
 from .image_segmentation import *
 from .object_detection import *
