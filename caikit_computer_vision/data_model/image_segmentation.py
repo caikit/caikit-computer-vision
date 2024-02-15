@@ -41,7 +41,9 @@ class ObjectSegment(DataObjectBase):
     # This mask should be image mode (L), 8 bit grayscale image treated
     # as a binary image, where 0 is background, and 255 is part of the
     # object to align with HF task definitions.
-    mask: Annotated[Union[caikit_dm.Image, List[float]], FieldNumber(5)]
+    # mask or polygon -- one of them is returned
+    polygon: Annotated[List[float], FieldNumber(5)]
+    mask: Annotated[caikit_dm.Image, FieldNumber(6)]
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")

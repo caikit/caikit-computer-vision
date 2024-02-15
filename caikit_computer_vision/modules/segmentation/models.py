@@ -84,24 +84,18 @@ class ViTSegmenter(ModuleBase):
     def save(
         self,
         model_path: str,
-        segmentation_dirname: str = "image_segmentation",
     ):
         """Save the in-memory model to the given path.
 
         Args:
             model_path: str
                 Path that we want to export the segmentation model to.
-            segmentation_dirname: str
-                Subdirectory to which we want to save the segmentation model.
-                Default: image_segmentation
         """
         saver = ModuleSaver(
             self,
             model_path=model_path,
         )
-        segmentation_rel_path, segmentation_abs_path = saver.add_dir(
-            segmentation_dirname
-        )
+        segmentation_rel_path, segmentation_abs_path = saver.add_dir(model_path)
         with saver:
             saver.update_config(
                 {
@@ -181,7 +175,7 @@ class ViTSegmenter(ModuleBase):
                 score=results[idx]["attributes"]["score"],
                 category_id=results[idx]["category_id"],
                 bbox=BoundingBox(*results[idx]["bbox"]),
-                mask=results[idx]["segmentation"],
+                polygon=results[idx]["segmentation"],
                 area=results[idx]["area"],
             )
             for idx in range(num_objects)

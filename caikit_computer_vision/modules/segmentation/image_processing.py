@@ -50,7 +50,8 @@ def maskrcnn_postprocess(
         results (dict): COCO json from an inference task
         uuid (str): Unique identifier of image
         image_id (int, optional): Image ID to store in the task. Defaults to 1.
-
+        threshold (float):  Threshold in range (0,1] to be used for filtering bounding box predictions.
+                Default 0.2
     Returns:
         dict: Formatted COCO JSON in OCL format
     """
@@ -62,8 +63,12 @@ def maskrcnn_postprocess(
     try:
         result_instances = detector_postprocess(instances, image_size[0], image_size[1])
     except IndexError as e:
-        log.error(f"Length of MASKS {len(results['MASKS'])}")
-        log.error("No instances found, setting empty annotations", exc_info=e)
+        error("<CCV61312083E>", f"Length of MASKS {len(results['MASKS'])}")
+        error(
+            "<CCV61312083E>",
+            "No instances found, setting empty annotations",
+            exc_info=e,
+        )
         result_instances = []
     coco_instances = instances_to_coco_json(result_instances, image_id)
     coco_json = _assemble_images_coco(
@@ -167,11 +172,13 @@ def detectron2_to_coco(
     if isinstance(inf_coco, str):
         inf_coco = COCO(inf_coco)
     else:
-        assert isinstance(inf_coco, COCO), "inf_coco must be an instance of class COCO"
+        error.type_check("<CCV61312083E>", COCO, inf_coco=inf_coco)
 
-    assert (
-        "categories" and "images" in inf_coco.dataset
-    ), "inf_coco should contain both 'categories' and 'images' keys"
+    error.value_check(
+        "<CCV61312083E>",
+        ("categories" and "images" in inf_coco.dataset),
+        "inf_coco should contain both 'categories' and 'images' keys",
+    )
 
     # give ids to annotations
     # correct the placement of the score key as in coco
@@ -230,10 +237,10 @@ def convert_seg_poly(inf_coco: Type[COCO]) -> Type[COCO]:
     """converts segmentation from detectron2 format to polygons.
 
     Args:
-      inf_coco : coco object with annotations containing detectron2 formatted segmentations
+      inf_coco : coco object with annotations dictionary containing detectron2 formatted segmentations
 
     Returns:
-      inf_coco : coco dict with annotations containing coco formatted polygons
+      inf_coco : coco object with annotations dictionary containing coco formatted polygons
     """
 
     def mask_to_polygons(mask):
@@ -245,14 +252,12 @@ def convert_seg_poly(inf_coco: Type[COCO]) -> Type[COCO]:
         mask = np.ascontiguousarray(
             mask
         )  # some versions of cv2 does not support incontiguous arr
-        res = cv2.findContours(
+        res, hierarchy = cv2.findContours(
             mask.astype("uint8"), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE
         )
-        hierarchy = res[-1]
         if hierarchy is None:  # empty mask
             return [], False
         has_holes = (hierarchy.reshape(-1, 4)[:, 3] >= 0).sum() > 0
-        res = res[-2]
         res = [x.flatten() for x in res]
         # These coordinates from OpenCV are integers in range [0, W-1 or H-1].
         # We add 0.5 to turn them into real-value coordinate space. A better solution

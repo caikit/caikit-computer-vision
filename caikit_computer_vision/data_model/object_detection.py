@@ -42,10 +42,10 @@ class Point2d(DataObjectBase):
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class BoundingBox(DataObjectBase):
-    xmin: Annotated[int, FieldNumber(1)]
-    xmax: Annotated[int, FieldNumber(2)]
-    ymin: Annotated[int, FieldNumber(3)]
-    ymax: Annotated[int, FieldNumber(4)]
+    xmin: Annotated[float, FieldNumber(1)]
+    xmax: Annotated[float, FieldNumber(2)]
+    ymin: Annotated[float, FieldNumber(3)]
+    ymax: Annotated[float, FieldNumber(4)]
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")

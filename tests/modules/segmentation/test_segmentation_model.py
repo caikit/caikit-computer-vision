@@ -37,8 +37,7 @@ def test_save_model_and_bootstrap():
     """Ensure that we can save a model and reload it."""
     model = ViTSegmenter.bootstrap(SEGMENTATION_MODEL_CKPT)
     with tempfile.TemporaryDirectory() as model_dir:
-        model.save(model_dir, "segmenter")
-        del model
+        model.save(model_dir)
         new_model = ViTSegmenter.load(model_dir)
         preds = new_model.run(np.ones((800, 800, 3), dtype=np.uint8))
         assert isinstance(preds, ImageSegmentationResult)
