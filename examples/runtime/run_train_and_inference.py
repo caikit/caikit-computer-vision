@@ -11,20 +11,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Runs a sample train [currently a stub], and exports the trained model under a new ID.
+"""Runs a sample train [currently a stub], and exports the trained model under a new ID,
+then hits it with an inference request.
 """
 
 # Standard
-from pathlib import Path
 from time import sleep
 import os
-import sys
 
 # Third Party
 from common import (
     DEMO_MODEL_ID,
     MODELS_DIR,
-    TRAINING_DATA_DIR,
+    NEW_MODEL_ID,
     TRAINING_IMG_DIR,
     TRAINING_LABELS_FILE,
 )
@@ -73,9 +72,6 @@ from PIL import Image
 import grpc
 import numpy as np
 
-# First Party
-from caikit.interfaces.vision import data_model as caikit_dm
-
 
 ### build the training request
 # Training params; the only thing that changes between newer/older versions of caikit is that
@@ -98,7 +94,7 @@ def get_train_request():
             )
         }
     return odt_request_pb2.ObjectDetectionTaskTransformersObjectDetectorTrainRequest(
-        model_name="new_model", **train_param_dict
+        model_name=NEW_MODEL_ID, **train_param_dict
     )
 
 
@@ -157,16 +153,20 @@ if __name__ == "__main__":
     print(response)
     print("*" * 30)
 
-    sleep(5)
+    # The train command is basically an alias to save here - by default, if lazy_load_local_models
+    # is True in the module, config, we sync new models from the model dir every
+    # lazy_load_poll_period_seconds, which by deafult is 10 seconds. So 15 should be plenty of time
+    # for the new_model to export and load.
+    sleep(15)
 
     inference_stub = computervisionservice_pb2_grpc.ComputerVisionServiceStub(
         channel=channel
     )
-    # NOTE: This just hits the old model, since normally the loading would be handled by something
-    # like kserve/model mesh. But it might be more helpful to show how to manually load the model
-    # and hit it here, just for reference.
+    # NOTE: if this fails, make sure lazy_load_local_models is true in the config.
+    # If needed, increase the log.level in the runtime config; setting level to
+    # debug2 or higher should show polling of the local model dir, load calls, etc.
     response = inference_stub.ObjectDetectionTaskPredict(
-        get_inference_request(), metadata=[("mm-model-id", DEMO_MODEL_ID)], timeout=1
+        get_inference_request(), metadata=[("mm-model-id", NEW_MODEL_ID)], timeout=1
     )
     print("*" * 30)
     print("RESPONSE from INFERENCE gRPC\n")

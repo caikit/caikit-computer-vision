@@ -6,7 +6,7 @@ jvm_options: []
 runtime:
   library: caikit_computer_vision
   local_models_dir: models
-  lazy_load_local_models": True
+  lazy_load_local_models: True
   grpc:
     enabled: True
   http:
@@ -21,6 +21,8 @@ runtime:
 
 log:
   formatter: pretty # optional: log formatter is set to json by default
+  # By default log level is info - you can override it as shown below.
+  # level: debug2
 
 model_management:
   finders:

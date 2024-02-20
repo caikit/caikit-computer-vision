@@ -34,9 +34,9 @@ python3 run_train_and_inference.py
 
 This will create a gRPC client to call `.train()` on the object detector module, which currently a stub. Note that the training parameters are not actually being used here and only are present for illustration purposes to show how args are passed. The result of the train job is simply the same model provided as the base, exported under a new model ID, `new_model`.
 
-Then, an inference request is sent to the _original_ model, which calls `.run()`, to produce the prediction that is logged by the script.
+Then, an inference request is sent to the newly loaded model, which calls `.run()`, to produce the prediction that is logged by the script.
 
-NOTE: it would be a good idea to show how to load and run the new model in this demo, but since loading is generally handled by kserve/model mesh, for now we just hit the old one.
+NOTE: in order to hit the new model, we need to set `runtime.lazy_load_local_models=True` in the runtime config, which by default will sync the local model dir with the in memory runtime (i.e., load models that have been added and unload models that have been deleted) every 10 seconds. If inference fails, try setting the log level to `debug2` and ensure that you see the runtime polling for new models periodically.
 
 ## A Deeper Look
 
