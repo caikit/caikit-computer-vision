@@ -42,5 +42,7 @@ PROTO_EXPORT_DIR = "protos"
 
 # Example model ID to use when creating a small model at model dir init time
 DEMO_MODEL_ID = "my_model"
+# New model that we are going to train and run an inference call on
+NEW_MODEL_ID = "new_model"
 
 RUNTIME_PORT = 8085
