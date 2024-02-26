@@ -63,9 +63,9 @@ def maskrcnn_postprocess(
     try:
         result_instances = detector_postprocess(instances, image_size[0], image_size[1])
     except IndexError as e:
-        error("<CCV61312083E>", f"Length of MASKS {len(results['MASKS'])}")
+        error("<CCV21811501E>", f"Length of MASKS {len(results['MASKS'])}")
         error(
-            "<CCV61312083E>",
+            "<CCV96470531E>",
             "No instances found, setting empty annotations",
             exc_info=e,
         )
@@ -135,7 +135,6 @@ def _assemble_images_coco(
                 "file_name": file_name,
                 "height": height,
                 "width": width,
-                "license": 1,
             }
         ],
     )
@@ -172,10 +171,10 @@ def detectron2_to_coco(
     if isinstance(inf_coco, str):
         inf_coco = COCO(inf_coco)
     else:
-        error.type_check("<CCV61312083E>", COCO, inf_coco=inf_coco)
+        error.type_check("<CCV49366892E>", COCO, inf_coco=inf_coco)
 
     error.value_check(
-        "<CCV61312083E>",
+        "<CCV62117290E>",
         ("categories" and "images" in inf_coco.dataset),
         "inf_coco should contain both 'categories' and 'images' keys",
     )

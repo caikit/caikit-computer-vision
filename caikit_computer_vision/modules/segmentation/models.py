@@ -95,7 +95,9 @@ class ViTSegmenter(ModuleBase):
             self,
             model_path=model_path,
         )
-        segmentation_rel_path, segmentation_abs_path = saver.add_dir(model_path)
+        segmentation_rel_path, segmentation_abs_path = saver.add_dir(
+            "segmentation_model", model_path
+        )
         with saver:
             saver.update_config(
                 {

@@ -32,6 +32,11 @@ log = alog.use_channel("DATAM")
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
+class Polygon(DataObjectBase):
+    coords: Annotated[List[float], FieldNumber(5)]
+
+
+@dataobject(package="caikit_data_model.caikit_computer_vision")
 class ObjectSegment(DataObjectBase):
     score: Annotated[float, FieldNumber(1)]
     label: Annotated[str, FieldNumber(2)]
@@ -42,7 +47,7 @@ class ObjectSegment(DataObjectBase):
     # as a binary image, where 0 is background, and 255 is part of the
     # object to align with HF task definitions.
     # mask or polygon -- one of them is returned
-    polygon: Annotated[List[float], FieldNumber(5)]
+    polygon: Annotated[List[Polygon], FieldNumber(5)]
     mask: Annotated[caikit_dm.Image, FieldNumber(6)]
 
 
