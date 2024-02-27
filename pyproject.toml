@@ -17,7 +17,11 @@ dependencies = [
     "caikit[runtime-grpc,runtime-http,interfaces-vision]>=0.26.5,<0.27.0",
     "transformers>=4.27.1,<5",
     "torch>2.0,<3",
-    "timm>=0.9.5,<1"
+    "timm>=0.9.5,<1",
+    "opencv-python>=4.9.0.80,<5",
+    "pycocotools>=2.0.7,<3",
+    "detectron2 @git+https://github.com/facebookresearch/detectron2.git@e70b9229d77aa39d85f8fa5266e6ea658e92eed3",
+    "shapely>=2.0.2,<3",
 ]
 
 [project.urls]

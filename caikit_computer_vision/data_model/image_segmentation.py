@@ -13,9 +13,8 @@
 # limitations under the License.
 """Data structures for segmentation in images."""
 
-
 # Standard
-from typing import List
+from typing import List, Union
 
 # Third Party
 from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
@@ -26,18 +25,30 @@ from caikit.interfaces.common.data_model import ProducerId
 from caikit.interfaces.vision import data_model as caikit_dm
 import alog
 
+# Local
+from .object_detection import BoundingBox
+
 log = alog.use_channel("DATAM")
+
+
+@dataobject(package="caikit_data_model.caikit_computer_vision")
+class Polygon(DataObjectBase):
+    coords: Annotated[List[float], FieldNumber(5)]
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
 class ObjectSegment(DataObjectBase):
     score: Annotated[float, FieldNumber(1)]
     label: Annotated[str, FieldNumber(2)]
+    bbox: Annotated[BoundingBox, FieldNumber(3)]
+    area: Annotated[int, FieldNumber(4)]
     # TODO: We should be able to specify subtype, i.e., PIL image mode.
     # This mask should be image mode (L), 8 bit grayscale image treated
     # as a binary image, where 0 is background, and 255 is part of the
     # object to align with HF task definitions.
-    mask: Annotated[caikit_dm.Image, FieldNumber(3)]
+    # mask or polygon -- one of them is returned
+    polygon: Annotated[List[Polygon], FieldNumber(5)]
+    mask: Annotated[caikit_dm.Image, FieldNumber(6)]
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
