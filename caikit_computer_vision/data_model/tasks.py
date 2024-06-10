@@ -26,6 +26,7 @@ from .flat_image import FlatImage
 from .image_classification import ImageClassificationResult
 from .image_segmentation import ImageSegmentationResult
 from .object_detection import ObjectDetectionResult
+from .text_to_image import TextToImageResult
 
 
 # TODO - add support for image DM primitives
@@ -60,4 +61,15 @@ class ImageSegmentationTask(TaskBase):
     and producing a pixel mask with optional class names and confidence scores.
     Note that at the moment, this task encapsulates all segmentation types,
     I.e., instance, object, semantic, etc...
+    """
+
+
+@task(
+    required_parameters={"inputs": str},
+    output_type=TextToImageResult,
+)
+class TextToImageTask(TaskBase):
+    """The text to image task is responsible for taking an input text prompt, along with
+    other optional image generation parameters, e.g., image height and width,
+    and generating an image.
     """
