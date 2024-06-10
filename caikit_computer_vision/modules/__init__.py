@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # Local
-from . import object_detection, segmentation
+from . import object_detection, segmentation, text_to_image
