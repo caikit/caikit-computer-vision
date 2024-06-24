@@ -13,4 +13,4 @@
 # limitations under the License.
 
 # Local
-from .sdxl import SDXLStub
+from .sdxl_stub import SDXLStub
