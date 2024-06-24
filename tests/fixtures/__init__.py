@@ -21,6 +21,7 @@ import pytest
 from caikit_computer_vision.modules.object_detection import TransformersObjectDetector
 
 # from caikit_computer_vision.modules.segmentation import ViTSegmenter
+from caikit_computer_vision.modules.text_to_image import SDXL
 
 ### Constants used in fixtures
 FIXTURES_DIR = os.path.join(os.path.dirname(__file__))
@@ -28,6 +29,7 @@ TINY_MODELS_DIR = os.path.join(FIXTURES_DIR, "tiny_models")
 TRANSFORMER_OBJ_DETECT_MODEL = os.path.join(TINY_MODELS_DIR, "YolosForObjectDetection")
 # SEMANTIC_SEGMENTATION_MODEL_DIR = os.path.join(TINY_MODELS_DIR, "ImageSegmentation")
 # SEGMENTATION_MODEL_CKPT = os.path.join(SEMANTIC_SEGMENTATION_MODEL_DIR, "model.pt")
+SDXL_MODEL = os.path.join(TINY_MODELS_DIR, "SDXL")
 
 
 @pytest.fixture
@@ -40,3 +42,9 @@ def detector_transformer_dummy_model():
 # def segmentation_dummy_model():
 #     """Load torch scripted model weights for ViT Segmentation"""
 #     return ViTSegmenter.bootstrap(SEGMENTATION_MODEL_CKPT)
+
+
+@pytest.fixture
+def sdxl_dummy_model():
+    """Load an SDXL dummy model."""
+    return SDXL.load(SDXL_MODEL)

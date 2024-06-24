@@ -1,0 +1,10 @@
+caikit_computer_vision_version: 0.0.1
+created: "2024-06-24 14:03:31.930040"
+model_name: hf-internal-testing/tiny-stable-diffusion-xl-pipe
+module_class: caikit_computer_vision.modules.text_to_image.sdxl.SDXL
+module_id: 28aa938b-1a33-11a0-11a3-bb9c3b1cbb11
+name: Text to Image via SDXL
+saved: "2024-06-24 14:03:31.930044"
+sdxl_model: ./sdxl_model
+tracking_id: 8cc3a483-7eb6-4e81-beb6-b6c352a0a3bc
+version: 0.1.0

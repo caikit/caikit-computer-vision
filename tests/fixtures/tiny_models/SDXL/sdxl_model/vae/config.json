@@ -1,0 +1,22 @@
+{
+  "_class_name": "AutoencoderKL",
+  "_diffusers_version": "0.29.1",
+  "_name_or_path": "/Users/alexanderjbrooks/.cache/huggingface/hub/models--hf-internal-testing--tiny-stable-diffusion-xl-pipe/snapshots/fa06b5c3d6d45fabd978486616c6dae068519e85/vae",
+  "act_fn": "silu",
+  "block_out_channels": [32, 64],
+  "down_block_types": ["DownEncoderBlock2D", "DownEncoderBlock2D"],
+  "force_upcast": true,
+  "in_channels": 3,
+  "latent_channels": 4,
+  "latents_mean": null,
+  "latents_std": null,
+  "layers_per_block": 1,
+  "norm_num_groups": 32,
+  "out_channels": 3,
+  "sample_size": 128,
+  "scaling_factor": 0.18215,
+  "shift_factor": null,
+  "up_block_types": ["UpDecoderBlock2D", "UpDecoderBlock2D"],
+  "use_post_quant_conv": true,
+  "use_quant_conv": true
+}
