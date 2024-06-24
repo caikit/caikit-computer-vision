@@ -1,0 +1,19 @@
+{
+  "_class_name": "EulerDiscreteScheduler",
+  "_diffusers_version": "0.29.1",
+  "beta_end": 0.012,
+  "beta_schedule": "scaled_linear",
+  "beta_start": 0.00085,
+  "final_sigmas_type": "zero",
+  "interpolation_type": "linear",
+  "num_train_timesteps": 1000,
+  "prediction_type": "epsilon",
+  "rescale_betas_zero_snr": false,
+  "sigma_max": null,
+  "sigma_min": null,
+  "steps_offset": 1,
+  "timestep_spacing": "leading",
+  "timestep_type": "discrete",
+  "trained_betas": null,
+  "use_karras_sigmas": false
+}
