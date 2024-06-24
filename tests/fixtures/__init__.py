@@ -19,14 +19,15 @@ import pytest
 
 # Local
 from caikit_computer_vision.modules.object_detection import TransformersObjectDetector
-from caikit_computer_vision.modules.segmentation import ViTSegmenter
+
+# from caikit_computer_vision.modules.segmentation import ViTSegmenter
 
 ### Constants used in fixtures
 FIXTURES_DIR = os.path.join(os.path.dirname(__file__))
 TINY_MODELS_DIR = os.path.join(FIXTURES_DIR, "tiny_models")
 TRANSFORMER_OBJ_DETECT_MODEL = os.path.join(TINY_MODELS_DIR, "YolosForObjectDetection")
-SEMANTIC_SEGMENTATION_MODEL_DIR = os.path.join(TINY_MODELS_DIR, "ImageSegmentation")
-SEGMENTATION_MODEL_CKPT = os.path.join(SEMANTIC_SEGMENTATION_MODEL_DIR, "model.pt")
+# SEMANTIC_SEGMENTATION_MODEL_DIR = os.path.join(TINY_MODELS_DIR, "ImageSegmentation")
+# SEGMENTATION_MODEL_CKPT = os.path.join(SEMANTIC_SEGMENTATION_MODEL_DIR, "model.pt")
 
 
 @pytest.fixture
@@ -35,7 +36,7 @@ def detector_transformer_dummy_model():
     return TransformersObjectDetector.bootstrap(TRANSFORMER_OBJ_DETECT_MODEL)
 
 
-@pytest.fixture
-def segmentation_dummy_model():
-    """Load torch scripted model weights for ViT Segmentation"""
-    return ViTSegmenter.bootstrap(SEGMENTATION_MODEL_CKPT)
+# @pytest.fixture
+# def segmentation_dummy_model():
+#     """Load torch scripted model weights for ViT Segmentation"""
+#     return ViTSegmenter.bootstrap(SEGMENTATION_MODEL_CKPT)
