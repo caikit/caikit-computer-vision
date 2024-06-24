@@ -13,10 +13,13 @@
 # limitations under the License.
 
 # Standard
-import os
 from tempfile import TemporaryDirectory
-import caikit_computer_vision
+import os
+
+# Local
 from caikit_computer_vision.modules.text_to_image import SDXLStub
+import caikit_computer_vision
+
 
 def test_sdxl_stub():
     """Ensure that the stubs for load / save / run work as expected."""
