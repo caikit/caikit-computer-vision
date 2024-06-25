@@ -13,4 +13,4 @@
 # limitations under the License.
 
 # Local
-from .sdxl_stub import SDXLStub
+from .tti_stub import TTIStub

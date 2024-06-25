@@ -17,15 +17,15 @@ from tempfile import TemporaryDirectory
 import os
 
 # Local
-from caikit_computer_vision.modules.text_to_image import SDXLStub
+from caikit_computer_vision.modules.text_to_image import TTIStub
 import caikit_computer_vision
 
 
-def test_sdxl_stub():
+def test_tti_stub():
     """Ensure that the stubs for load / save / run work as expected."""
     # Make sure we can bootstrap a model
-    model = SDXLStub.bootstrap("foo")
-    assert isinstance(model, SDXLStub)
+    model = TTIStub.bootstrap("foo")
+    assert isinstance(model, TTIStub)
 
     # Make sure we can run a fake inference on it
     pred = model.run("This is a prompt", height=500, width=550)

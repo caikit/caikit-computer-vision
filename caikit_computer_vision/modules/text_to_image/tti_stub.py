@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Module for text to image via SDXL.
+"""Stub module for text to image for testing runtime interfaces.
 """
 # Standard
 from typing import Union, get_args
@@ -29,7 +29,7 @@ import alog
 from ...data_model import TextToImageResult
 from ...data_model.tasks import TextToImageTask
 
-log = alog.use_channel("SDXL")
+log = alog.use_channel("TTI_STUB")
 
 
 @module(
@@ -38,22 +38,22 @@ log = alog.use_channel("SDXL")
     version="0.1.0",
     task=TextToImageTask,
 )
-class SDXLStub(ModuleBase):
+class TTIStub(ModuleBase):
     def __init__(
         self,
         model_name,
-    ) -> "SDXLStub":
+    ) -> "TTIStub":
         log.debug("STUB - initializing text to image instance")
         super().__init__()
         self.model_name = model_name
 
     @classmethod
-    def load(cls, model_path: Union[str, "ModuleConfig"]) -> "SDXLStub":
+    def load(cls, model_path: Union[str, "ModuleConfig"]) -> "TTIStub":
         config = ModuleConfig.load(model_path)
         return cls.bootstrap(config.model_name)
 
     @classmethod
-    def bootstrap(cls, model_name: str) -> "SDXLStub":
+    def bootstrap(cls, model_name: str) -> "TTIStub":
         return cls(model_name)
 
     def save(self, model_path: str):
