@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:latest as base
 
 RUN microdnf update -y && \
     microdnf install -y \
-        python3-devel gcc git python-pip && \
+        python3-devel python-pip && \
     pip install --upgrade --no-cache-dir pip wheel && \
     microdnf clean all
 
