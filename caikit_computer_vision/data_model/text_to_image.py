@@ -14,9 +14,6 @@
 """Data structures for text to image."""
 
 
-# Standard
-from typing import List
-
 # Third Party
 from py_to_proto.dataclass_to_proto import Annotated, FieldNumber
 
@@ -30,7 +27,7 @@ log = alog.use_channel("DATAM")
 
 
 @dataobject(package="caikit_data_model.caikit_computer_vision")
-class TextToImageResult(DataObjectBase):
-    # TODO: Align on the output format
+class CaptionedImage(DataObjectBase):
     output: Annotated[caikit_dm.Image, FieldNumber(1)]
-    producer_id: Annotated[ProducerId, FieldNumber(2)]
+    caption: Annotated[str, FieldNumber(2)]
+    producer_id: Annotated[ProducerId, FieldNumber(3)]

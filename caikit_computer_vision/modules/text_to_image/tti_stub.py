@@ -26,7 +26,7 @@ from caikit.interfaces.vision import data_model as caikit_dm
 import alog
 
 # Local
-from ...data_model import TextToImageResult
+from ...data_model import CaptionedImage
 from ...data_model.tasks import TextToImageTask
 
 log = alog.use_channel("TTI_STUB")
@@ -64,13 +64,14 @@ class TTIStub(ModuleBase):
         with saver:
             saver.update_config({"model_name": self.model_name})
 
-    def run(self, inputs: str, height: int, width: int) -> TextToImageResult:
+    def run(self, inputs: str, height: int, width: int) -> CaptionedImage:
         """Generates an image matching the provided height and width."""
         log.debug("STUB - running text to image inference")
         r_channel = np.full((height, width), 0, dtype=np.uint8)
         g_channel = np.full((height, width), 100, dtype=np.uint8)
         b_channel = np.full((height, width), 200, dtype=np.uint8)
         img = np.stack((r_channel, g_channel, b_channel), axis=2)
-        return TextToImageResult(
+        return CaptionedImage(
             output=caikit_dm.Image(img),
+            caption=inputs,
         )

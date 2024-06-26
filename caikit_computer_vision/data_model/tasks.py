@@ -26,7 +26,7 @@ from .flat_image import FlatImage
 from .image_classification import ImageClassificationResult
 from .image_segmentation import ImageSegmentationResult
 from .object_detection import ObjectDetectionResult
-from .text_to_image import TextToImageResult
+from .text_to_image import CaptionedImage
 
 
 # TODO - add support for image DM primitives
@@ -66,7 +66,7 @@ class ImageSegmentationTask(TaskBase):
 
 @task(
     required_parameters={"inputs": str},
-    output_type=TextToImageResult,
+    output_type=CaptionedImage,
 )
 class TextToImageTask(TaskBase):
     """The text to image task is responsible for taking an input text prompt, along with

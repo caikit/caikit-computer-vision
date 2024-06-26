@@ -29,6 +29,8 @@ def test_tti_stub():
 
     # Make sure we can run a fake inference on it
     pred = model.run("This is a prompt", height=500, width=550)
+    assert isinstance(pred, caikit_computer_vision.data_model.CaptionedImage)
+    assert pred.caption == "This is a prompt"
     pil_img = pred.output.as_pil()
     assert pil_img.width == 550
     assert pil_img.height == 500
