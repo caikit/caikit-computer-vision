@@ -30,7 +30,7 @@ from common import (
 
 # pylint: disable=no-name-in-module,import-error
 try:
-    # Third Party
+    # Local
     from generated import (
         computervisionservice_pb2_grpc,
         computervisiontrainingservice_pb2_grpc,
@@ -41,7 +41,7 @@ except ImportError:
 # The location of these imported message types depends on the version of Caikit
 # that we are using.
 try:
-    # Third Party
+    # Local
     from generated.caikit_data_model.caikit_computer_vision import (
         flatchannel_pb2,
         flatimage_pb2,
@@ -58,7 +58,7 @@ try:
     IS_LEGACY = False
 except ModuleNotFoundError:
     # older versions of Caikit / py to proto create a flat proto structure
-    # Third Party
+    # Local
     from generated import objectdetectiontaskrequest_pb2
     from generated import (
         objectdetectiontasktransformersobjectdetectortrainrequest_pb2 as odt_request_pb2,
