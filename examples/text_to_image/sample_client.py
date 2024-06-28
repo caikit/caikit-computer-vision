@@ -1,13 +1,13 @@
+# Standard
 import io
 
-from generated import (
-    computervisionservice_pb2_grpc,
-)
-from generated.ccv import texttoimagetaskrequest_pb2
-
+# Third Party
 from PIL import Image
 import grpc
 
+# Local
+from generated import computervisionservice_pb2_grpc
+from generated.ccv import texttoimagetaskrequest_pb2
 
 # Setup the client
 port = 8085

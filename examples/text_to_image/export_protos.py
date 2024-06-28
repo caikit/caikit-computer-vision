@@ -7,9 +7,9 @@ import os
 from caikit.runtime.dump_services import dump_grpc_services
 import caikit
 
-SCRIPT_DIR=os.path.dirname(__file__)
-PROTO_EXPORT_DIR=os.path.join(SCRIPT_DIR, "protos")
-RUNTIME_CONFIG_PATH=os.path.join(SCRIPT_DIR, "caikit", "runtime_config.yaml")
+SCRIPT_DIR = os.path.dirname(__file__)
+PROTO_EXPORT_DIR = os.path.join(SCRIPT_DIR, "protos")
+RUNTIME_CONFIG_PATH = os.path.join(SCRIPT_DIR, "caikit", "runtime_config.yaml")
 
 if os.path.isdir(PROTO_EXPORT_DIR):
     rmtree(PROTO_EXPORT_DIR)
